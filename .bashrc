@@ -1,6 +1,7 @@
 # Command shortcuts
 alias rm="rm -i"
 alias ll="ls -ltA"
+alias vi="vim"
 
 # File shortcuts
 alias bashrc="vim ~/.bashrc && source ~/.bashrc"

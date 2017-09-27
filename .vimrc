@@ -13,6 +13,7 @@ set relativenumber      "relative numbering
 set hlsearch            "highlight search results
 set incsearch           "incremental searches
 set ruler               "show cursor position
+set backspace=2         "make backspace work normally
 
 " Colors
 colorscheme ron
