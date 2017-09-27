@@ -3,8 +3,8 @@ alias rm="rm -i"
 alias ll="ls -ltA"
 
 # File shortcuts
-alias bashrc="vi ~/.bashrc && source ~/.bashrc"
-alias vimrc="vi ~/.vimrc"
+alias bashrc="vim ~/.bashrc && source ~/.bashrc"
+alias vimrc="vim ~/.vimrc"
 
 # Bash completion
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
