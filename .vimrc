@@ -28,4 +28,4 @@ au BufReadPost *
 
 " Copy and paste with system clipboard
 vmap <C-c> "+y
-nmap <C-v> "+p
+imap <C-v> <Esc>"+p
