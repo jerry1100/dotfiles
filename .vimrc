@@ -29,3 +29,6 @@ au BufReadPost *
 " Copy and paste with system clipboard
 vmap <C-c> "+y
 imap <C-v> <Esc>"+p
+
+" Set CtrlP working directory to where vim was invoked
+let g:ctrlp_working_path_mode = 0
