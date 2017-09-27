@@ -12,6 +12,7 @@ set number              "line numbers
 set relativenumber      "relative numbering
 set hlsearch            "highlight search results
 set incsearch           "incremental searches
+set ruler               "show cursor position
 
 " Colors
 colorscheme ron
@@ -23,3 +24,7 @@ au BufReadPost *
 \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit'
 \ |   exe "normal! g`\""
 \ | endif
+
+" Copy and paste with system clipboard
+vmap <C-c> "+y
+nmap <C-v> "+p
