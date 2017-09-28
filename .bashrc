@@ -2,6 +2,7 @@
 alias rm="rm -i"
 alias ll="ls -ltA"
 alias vi="vim"
+alias grep="grep --color=auto"
 
 # File shortcuts
 alias bashrc="vim ~/.bashrc && source ~/.bashrc"
