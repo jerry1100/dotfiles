@@ -1,0 +1,26 @@
+// Place your key bindings in this file to overwrite the defaults
+[
+    // Toggle integrated terminal
+    {
+        "key": "ctrl+t",
+        "command": "workbench.action.terminal.toggleTerminal"
+    },
+
+    // Toggle terminal panel size
+    {
+        "key": "ctrl+shift+t",
+        "command": "workbench.action.toggleMaximizedPanel"
+    },
+
+    // Open peek definitions
+    {
+        "key": "ctrl+k",
+        "command": "editor.action.previewDeclaration"
+    },
+
+    // Match html tags
+    {
+        "key": "shift+cmd+5",
+        "command": "editor.emmet.action.matchTag"
+    }
+]

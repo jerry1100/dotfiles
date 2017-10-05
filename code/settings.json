@@ -1,0 +1,8 @@
+{
+    "vim.disableAnnoyingNeovimMessage": true,
+    "window.zoomLevel": 0,
+    "editor.lineNumbers": "relative",
+    "emmet.showExpandedAbbreviation": "never",
+    "workbench.startupEditor": "none",
+    "diffEditor.renderSideBySide": false
+}
