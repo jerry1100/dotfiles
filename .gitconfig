@@ -1,0 +1,7 @@
+[user]
+    name = jerry1100
+    email = jwu1100@gmail.com
+[core]
+    editor = vim
+[alias]
+    tree = log --graph --pretty=oneline --all
