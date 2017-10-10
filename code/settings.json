@@ -4,5 +4,8 @@
     "editor.lineNumbers": "relative",
     "emmet.showExpandedAbbreviation": "never",
     "workbench.startupEditor": "none",
-    "diffEditor.renderSideBySide": false
+    "diffEditor.renderSideBySide": false,
+    "[javascriptreact]": {
+        "editor.tabSize": 2
+    }
 }
