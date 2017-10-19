@@ -7,5 +7,8 @@
     "diffEditor.renderSideBySide": false,
     "[javascriptreact]": {
         "editor.tabSize": 2
-    }
+    },
+    "gitlens.codeLens.enabled": false,
+    "gitlens.blame.line.enabled": false,
+    "gitlens.gitExplorer.enabled": false
 }
