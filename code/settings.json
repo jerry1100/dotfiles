@@ -1,5 +1,5 @@
 {
-    "vim.disableAnnoyingNeovimMessage": true,
+    // Native settings
     "window.zoomLevel": 0,
     "editor.lineNumbers": "relative",
     "emmet.showExpandedAbbreviation": "never",
@@ -8,6 +8,9 @@
     "[javascriptreact]": {
         "editor.tabSize": 2
     },
+
+    // Extension settings
+    "vim.disableAnnoyingNeovimMessage": true,
     "gitlens.codeLens.enabled": false,
     "gitlens.blame.line.enabled": false,
     "gitlens.gitExplorer.enabled": false
