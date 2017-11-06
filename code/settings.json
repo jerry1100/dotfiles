@@ -11,6 +11,7 @@
     "[css]": {
         "editor.tabSize": 2
     },
+    "editor.minimap.enabled": false,
 
     // Extension settings
     "vim.disableAnnoyingNeovimMessage": true,
