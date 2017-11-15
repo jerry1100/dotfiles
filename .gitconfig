@@ -4,4 +4,4 @@
 [core]
     editor = vim
 [alias]
-    tree = log --graph --pretty=oneline --all
+    tree = log --graph --oneline
