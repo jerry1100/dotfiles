@@ -12,6 +12,7 @@
         "editor.tabSize": 2
     },
     "editor.minimap.enabled": false,
+    "window.openFilesInNewWindow": "on",
 
     // Extension settings
     "vim.disableAnnoyingNeovimMessage": true,
