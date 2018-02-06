@@ -5,3 +5,4 @@
     editor = vim
 [alias]
     tree = log --graph --oneline
+    fap = fetch --all --prune
