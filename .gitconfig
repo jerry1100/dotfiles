@@ -6,3 +6,4 @@
 [alias]
     tree = log --graph --oneline
     fap = fetch --all --prune
+    ref = log --graph --oneline HEAD upstream/HEAD

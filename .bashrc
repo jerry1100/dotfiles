@@ -7,6 +7,7 @@ alias grep="grep --color=auto"
 # File shortcuts
 alias bashrc="vim ~/.bashrc && source ~/.bashrc"
 alias vimrc="vim ~/.vimrc"
+alias gitconfig="vim ~/github/dotfiles/.gitconfig"
 
 # Bash completion
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
@@ -15,6 +16,7 @@ fi
 
 # Git branch on prompt
 export PS1="jerry@\h:\[\e[1;33m\]\w\[\e[m\]\[\e[1;32m\]\$(__git_ps1 ' [%s] ')\[\e[m\]\$ "
+export GIT_PS1_DESCRIBE_STYLE=branch # show refs in detached state
 
 # Colored files
 export CLICOLOR=1
