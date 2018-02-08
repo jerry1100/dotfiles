@@ -13,6 +13,7 @@
     },
     "editor.minimap.enabled": false,
     "window.openFilesInNewWindow": "on",
+    "workbench.settings.openDefaultSettings": false,
 
     // Extension settings
     "vim.disableAnnoyingNeovimMessage": true,
