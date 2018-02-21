@@ -21,3 +21,6 @@ export GIT_PS1_DESCRIBE_STYLE=branch # show refs in detached state
 # Colored files
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
+
+# Add home /bin to path
+export PATH="$PATH:${HOME}/bin"
