@@ -7,11 +7,11 @@ alias grep="grep --color=auto"
 # File shortcuts
 alias bashrc="vim ~/.bashrc && source ~/.bashrc"
 alias vimrc="vim ~/.vimrc"
-alias gitconfig="vim ~/github/dotfiles/.gitconfig"
+alias gitconfig="vim ~/github/dotfiles/gitconfig"
 
 # Bash completion
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
-  . $(brew --prefix)/etc/bash_completion
+    . $(brew --prefix)/etc/bash_completion
 fi
 
 # Git branch on prompt
