@@ -17,6 +17,9 @@ fi
 # Git branch on prompt
 export PS1="jerry@\h:\[\e[1;33m\]\w\[\e[m\]\[\e[1;32m\]\$(__git_ps1 ' [%s] ')\[\e[m\]\$ "
 export GIT_PS1_DESCRIBE_STYLE=branch # show refs in detached state
+export GIT_PS1_SHOWDIRTYSTATE=true # show '*' if uncomitted changes
+export GIT_PS1_SHOWSTASHSTATE=true # show '$' if stash is not empty
+export GIT_PS1_SHOWUNTRACKEDFILES=true # show '%' if untracked files
 
 # Colored files
 export CLICOLOR=1
