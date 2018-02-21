@@ -23,4 +23,6 @@ export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
 # Add home /bin to path
-export PATH="$PATH:${HOME}/bin"
+if [[ $PATH != *${HOME}/bin* ]]; then
+    export PATH="$PATH:${HOME}/bin"
+fi
