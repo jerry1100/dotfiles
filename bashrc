@@ -1,6 +1,7 @@
 # Command shortcuts
 alias rm="rm -i"
 alias ll="ls -ltA"
+alias lll="ll | less"
 alias vi="vim"
 alias grep="grep --color=auto"
 
