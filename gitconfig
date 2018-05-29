@@ -7,3 +7,4 @@
     tree = log --graph --oneline
     fap = fetch --all --prune
     ref = log --graph --oneline HEAD upstream/HEAD
+    compare = log --graph --oneline --cherry-mark --boundary
