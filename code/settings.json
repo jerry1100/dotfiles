@@ -18,5 +18,18 @@
     // Extension settings
     "gitlens.codeLens.enabled": false,
     "gitlens.currentLine.enabled": false,
-    "gitlens.gitExplorer.enabled": false
+    "gitlens.gitExplorer.enabled": false,
+    "gitlens.keymap": "chorded",
+    "gitlens.advanced.messages": {
+        "suppressCommitHasNoPreviousCommitWarning": false,
+        "suppressCommitNotFoundWarning": false,
+        "suppressFileNotUnderSourceControlWarning": false,
+        "suppressGitVersionWarning": false,
+        "suppressLineUncommittedWarning": false,
+        "suppressNoRepositoryWarning": false,
+        "suppressResultsExplorerNotice": false,
+        "suppressShowKeyBindingsNotice": true
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "gitlens.historyExplorer.enabled": true
 }
