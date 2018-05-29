@@ -1,6 +1,6 @@
 # Command shortcuts
 alias rm="rm -i"
-alias ll="ls -ltA"
+alias ll="ls -lthA"
 alias lll="ll | less"
 alias vi="vim"
 alias grep="grep --color=auto"
@@ -26,7 +26,10 @@ export GIT_PS1_SHOWUNTRACKEDFILES=true # show '%' if untracked files
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
-# Add home /bin to path
+# Add home bin to path
 if [[ $PATH != *${HOME}/bin* ]]; then
     export PATH="$PATH:${HOME}/bin"
 fi
+
+# Add go bin to path
+export PATH=$PATH:$(go env GOPATH)/bin
