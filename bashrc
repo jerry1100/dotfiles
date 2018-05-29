@@ -17,10 +17,10 @@ fi
 
 # Minikube bash completion
 minikube_completion="${HOME}/.minikube/minikube-completion"
-if ! [ -f "${minikube_completion}" ]; then
-    minikube completion bash > "${minikube_completion}"
+if ! [ -f ${minikube_completion} ]; then
+    minikube completion bash > ${minikube_completion}
 fi
-source "${minikube_completion}"
+source ${minikube_completion}
 
 # Git branch on prompt
 export PS1="jerry@\h:\[\e[1;33m\]\w\[\e[m\]\[\e[1;32m\]\$(__git_ps1 ' [%s] ')\[\e[m\]\$ "
