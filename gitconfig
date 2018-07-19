@@ -8,3 +8,5 @@
     fap = fetch --all --prune
     ref = log --graph --oneline HEAD upstream/HEAD
     compare = log --graph --oneline --cherry-mark --boundary
+    origin = !open https://$(git remote get-url origin | sed "s/git@//" | tr ":" "/")
+    upstream = !open https://$(git remote get-url upstream | sed "s/git@//" | tr ":" "/")
