@@ -33,6 +33,9 @@ export GIT_PS1_SHOWUNTRACKEDFILES=true # show '%' if untracked files
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
+# Vim master race
+export EDITOR="vim"
+
 # Add home bin to path
 if [[ $PATH != *$HOME/bin* ]]; then
     export PATH="$PATH:$HOME/bin"
