@@ -15,6 +15,12 @@ set incsearch           "incremental searches
 set ruler               "show cursor position
 set backspace=2         "make backspace work normally
 
+" File-specific settings
+autocmd FileType javascript setlocal ts=2 sts=2 sw=2
+autocmd FileType json setlocal ts=2 sts=2 sw=2
+autocmd FileType html setlocal ts=2 sts=2 sw=2
+autocmd FileType css setlocal ts=2 sts=2 sw=2
+
 " Colors
 colorscheme ron
 highlight linenr ctermfg=darkgrey
