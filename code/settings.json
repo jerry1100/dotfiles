@@ -18,6 +18,11 @@
     "editor.wordBasedSuggestions": false, // suggests words that are present in the file
     "javascript.nameSuggestions": false, // suggests a bunch of global identifiers
     "javascript.validate.enable": false, // adds native validation for javascript
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true
+    },
 
     // Extension settings
     "gitlens.codeLens.enabled": false,
