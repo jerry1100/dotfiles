@@ -6,7 +6,7 @@
     "workbench.startupEditor": "none",
     "diffEditor.renderSideBySide": false,
     "diffEditor.ignoreTrimWhitespace": false,
-    "[javascriptreact]": {
+    "[javascript]": {
         "editor.tabSize": 2
     },
     "[css]": {
