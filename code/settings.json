@@ -1,18 +1,14 @@
 {
     // Native settings
     "window.zoomLevel": 0,
+    "breadcrumbs.enabled": false,
     "editor.lineNumbers": "relative",
     "emmet.showExpandedAbbreviation": "never",
     "workbench.startupEditor": "none",
     "diffEditor.renderSideBySide": false,
     "diffEditor.ignoreTrimWhitespace": false,
-    "[javascript]": {
-        "editor.tabSize": 2
-    },
-    "[css]": {
-        "editor.tabSize": 2
-    },
     "editor.minimap.enabled": false,
+    "editor.tabSize": 2,
     "window.openFilesInNewWindow": "on",
     "workbench.settings.openDefaultSettings": false,
     "editor.wordBasedSuggestions": false, // suggests words that are present in the file
