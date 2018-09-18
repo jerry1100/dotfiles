@@ -36,10 +36,6 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 # Vim master race
 export EDITOR="vim"
 
-# Add home bin to path
-if [[ $PATH != *$HOME/bin* ]]; then
-    export PATH="$PATH:$HOME/bin"
-fi
-
-# Add go bin to path
-export PATH=$PATH:$(go env GOPATH)/bin
+# Add stuff to path
+export PATH="$PATH:$HOME/bin"
+export PATH="$PATH:$(go env GOPATH)/bin"
