@@ -39,3 +39,4 @@ export EDITOR="vim"
 # Add stuff to path
 export PATH="$PATH:$HOME/bin"
 export PATH="$PATH:$(go env GOPATH)/bin"
+export PATH="$PATH:/usr/local/opt/node@8/bin"
