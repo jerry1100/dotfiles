@@ -10,6 +10,9 @@ alias bashrc="vim ~/.bashrc && source ~/.bashrc"
 alias vimrc="vim ~/.vimrc"
 alias gitconfig="vim ~/github/dotfiles/gitconfig"
 
+# Directory shortcuts
+alias dotfiles="cd ~/github/dotfiles"
+
 # Bash completion
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
     . $(brew --prefix)/etc/bash_completion
