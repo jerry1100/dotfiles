@@ -6,6 +6,8 @@
     "editor.fontSize": 14,
     "editor.lineNumbers": "relative",
     "editor.minimap.enabled": false,
+    "editor.snippetSuggestions": "none",
+    "editor.suggestSelection": "first",
     "editor.tabSize": 2,
     "editor.wordBasedSuggestions": false, // suggests words that are present in the file
     "emmet.showExpandedAbbreviation": "never",
@@ -18,4 +20,17 @@
     "workbench.startupEditor": "none",
 
     // Extension settings
+    "cSpell.userWords": [
+      "boilerplates",
+      "browserslist",
+      "circleci",
+      "devtools",
+      "entrypoint",
+      "flyout",
+      "gmail",
+      "pixelmatch",
+      "pngjs",
+      "repo",
+      "svgs"
+    ]
 }
