@@ -4,6 +4,8 @@ alias ll="ls -lthA"
 alias lll="ll | less"
 alias vi="vim"
 alias grep="grep --color=auto"
+alias python="python3"
+alias ncdu="ncdu --color=dark"
 
 # File shortcuts
 alias bashrc="vim ~/.bashrc && source ~/.bashrc"
