@@ -42,8 +42,8 @@ source ~/bin/git-prompt.sh
 
 # Build prompt
 precmd() {
-    user="%n@%m"
+    user="%n"
     dir="%F{yellow}%~%f"
-    branch="%F{green}$(__git_ps1 ' [%s]')%f"
-    PROMPT="${user}:${dir}${branch} %# "
+    branch="%F{green}$(__git_ps1 '[%s] ')%f"
+    PROMPT="${user} ${dir} ${branch}%# "
 }
