@@ -12,8 +12,10 @@
     "editor.wordBasedSuggestions": false, // suggests words that are present in the file
     "emmet.showExpandedAbbreviation": "never",
     "files.insertFinalNewline": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
     "javascript.validate.enable": false, // adds native validation for javascript
     "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontWeightBold": "normal",
     "window.openFilesInNewWindow": "on",
     "window.zoomLevel": 0,
     "workbench.settings.openDefaultSettings": false,
