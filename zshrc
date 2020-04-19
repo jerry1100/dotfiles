@@ -18,6 +18,9 @@ export EDITOR="vim"
 # Add home bin to path
 export PATH="$HOME/bin:$PATH"
 
+# Enable tab completion
+autoload -U compinit && compinit
+
 # Git prompt
 export GIT_PS1_DESCRIBE_STYLE=branch # show refs in detached state
 export GIT_PS1_SHOWDIRTYSTATE=true # show '*' if uncomitted changes
