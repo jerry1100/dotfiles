@@ -3,7 +3,7 @@ export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
 # Options
-setopt nolistbeep # don't beep when listing completions
+setopt nobeep # don't beep
 setopt noautomenu # don't auto insert after second tab
 
 # Aliases
