@@ -14,7 +14,7 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 export EDITOR="vim"
 
 # Add home bin to path
-export PATH="$PATH:$HOME/bin"
+export PATH="$HOME/bin:$PATH"
 
 # Options
 setopt nolistbeep # don't beep when listing completions
