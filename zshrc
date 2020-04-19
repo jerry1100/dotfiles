@@ -2,6 +2,10 @@
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
+# zstyle list-colors only works with LS_COLORS, which is the linux version of
+# mac's LSCOLORS. Converted using: https://geoff.greer.fm/lscolors/
+export LS_COLORS="di=1;36:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=34;43"
+
 # Options
 setopt nobeep # don't beep
 setopt noautomenu # don't auto insert after second tab
@@ -18,8 +22,12 @@ export EDITOR="vim"
 # Add home bin to path
 export PATH="$HOME/bin:$PATH"
 
-# Enable tab completion
+# Tab completion
 autoload -U compinit && compinit
+
+# Color partial tab completions, also color file completions
+# Adapted from https://stackoverflow.com/questions/8300687/zsh-color-partial-tab-completions
+zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==91}:${(s.:.)LS_COLORS}")'
 
 # Git prompt
 export GIT_PS1_DESCRIBE_STYLE=branch # show refs in detached state
