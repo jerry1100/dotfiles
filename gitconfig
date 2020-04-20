@@ -3,9 +3,10 @@
     email = jwu1100@gmail.com
 [core]
     editor = vim
+[advice]
+	detachedHead = false
 [alias]
     tree = log --graph --oneline
-    pap = pull --all --prune
     fap = fetch --all --prune
     ref = log --graph --oneline HEAD origin/HEAD
     compare = log --graph --oneline --cherry-mark --boundary
