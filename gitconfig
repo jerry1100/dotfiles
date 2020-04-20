@@ -5,6 +5,7 @@
     editor = vim
 [alias]
     tree = log --graph --oneline
+    pap = pull --all --prune
     fap = fetch --all --prune
     ref = log --graph --oneline HEAD origin/HEAD
     compare = log --graph --oneline --cherry-mark --boundary
