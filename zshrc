@@ -44,6 +44,6 @@ source ~/bin/git-prompt.sh
 precmd() {
     user="%n"
     dir="%F{yellow}%~%f"
-    branch="%F{green}$(__git_ps1 '[%s] ' | sed 's/origin\/HEAD/origin\/master/' | sed 's/remotes\///')%f"
+    branch="%F{green}$(__git_ps1 '[%s] ' | sed "s/HEAD/master/" | sed 's/remotes\///')%f"
     PROMPT="${user} ${dir} ${branch}%# "
 }
