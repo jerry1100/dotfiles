@@ -16,9 +16,6 @@ alias ll="ls -lthA"
 alias lll="ll | less"
 alias grep="grep --color=auto"
 
-# Vim master race
-export EDITOR="vim"
-
 # Add home bin to path
 export PATH="$HOME/bin:$PATH"
 
