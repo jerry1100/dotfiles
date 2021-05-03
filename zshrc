@@ -26,6 +26,9 @@ autoload -U compinit && compinit
 # Adapted from https://stackoverflow.com/questions/8300687/zsh-color-partial-tab-completions
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==91}:${(s.:.)LS_COLORS}")'
 
+# Enable case insensitive autocomplete
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
+
 # Git prompt
 export GIT_PS1_DESCRIBE_STYLE=branch # show refs in detached state
 export GIT_PS1_SHOWDIRTYSTATE=true # show '*' if uncomitted changes
