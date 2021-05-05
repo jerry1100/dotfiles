@@ -19,6 +19,9 @@ alias grep="grep --color=auto"
 # Add home bin to path
 export PATH="$HOME/bin:$PATH"
 
+# Use LTS version of node
+export PATH="/usr/local/opt/node@14/bin:$PATH"
+
 # Tab completion
 autoload -U compinit && compinit
 
