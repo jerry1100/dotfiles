@@ -15,3 +15,5 @@
     download = !git clone git@github.com:jerry1100/${1}.git
     gone = !git branch -D $(git for-each-ref --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' refs/heads)
     latest = !git fap && git checkout origin/master && git gone
+[includeIf "gitdir:~/work/"]
+    path = .gitconfig-work
