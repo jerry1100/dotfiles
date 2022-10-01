@@ -20,7 +20,7 @@ alias grep="grep --color=auto"
 export PATH="$HOME/bin:$PATH"
 
 # Use LTS version of node
-export PATH="/usr/local/opt/node@14/bin:$PATH"
+export PATH="/usr/local/opt/node@16/bin:$PATH"
 
 # Tab completion
 autoload -U compinit && compinit

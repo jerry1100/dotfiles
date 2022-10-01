@@ -9,6 +9,7 @@
     tree = log --graph --oneline
     fap = fetch --all --prune
     ref = log --graph --oneline HEAD origin/HEAD
+    pom = pull origin master
     compare = !git log --graph --oneline --cherry-mark --boundary HEAD...${1}
     btree = !git log --graph --oneline --cherry-mark --boundary HEAD...$(git for-each-ref refs/heads --format='%(refname:short)')
     origin = !open https://$(git remote get-url origin | sed "s/^git@//" | tr ":" "/")
