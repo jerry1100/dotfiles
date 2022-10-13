@@ -1,10 +1,10 @@
 [user]
-    name = jerry1100
-    email = jwu1100@icloud.com
+    name = Jerry Wu
+    email = jwu@figma.com
 [core]
     editor = vim
 [advice]
-	detachedHead = false
+    detachedHead = false
 [alias]
     tree = log --graph --oneline
     fap = fetch --all --prune
@@ -18,5 +18,5 @@
     gone = !git branch -D $(git for-each-ref --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' refs/heads)
     latest = !git fap && git checkout origin/master && git gone
     delrem = !git branch -r | grep -v "origin/master" | xargs git branch -rd
-[includeIf "gitdir:~/work/"]
-    path = .gitconfig-work
+[includeIf "gitdir:~/me/"]
+    path = ~/me/dotfiles/gitconfig-me
