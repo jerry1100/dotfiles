@@ -9,14 +9,12 @@
     tree = log --graph --oneline
     fap = fetch --all --prune
     ref = log --graph --oneline HEAD origin/HEAD
-    pom = pull origin master
     compare = !git log --graph --oneline --cherry-mark --boundary HEAD...${1}
     btree = !git log --graph --oneline --cherry-mark --boundary HEAD...$(git for-each-ref refs/heads --format='%(refname:short)')
     origin = !open https://$(git remote get-url origin | sed "s/^git@//" | tr ":" "/")
     upstream = !open https://$(git remote get-url upstream | sed "s/^git@//" | tr ":" "/")
-    download = !git clone git@github.com:jerry1100/${1}.git
+    download = !git clone git@me.github.com:jerry1100/${1}.git
     gone = !git branch -D $(git for-each-ref --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' refs/heads)
-    latest = !git fap && git checkout origin/master && git gone
     delrem = !git branch -r | grep -v "origin/master" | xargs git branch -rd
 [includeIf "gitdir:~/me/"]
     path = ~/me/dotfiles/gitconfig-me
