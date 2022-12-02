@@ -5,6 +5,9 @@
     editor = vim
 [advice]
     detachedHead = false
+[remote "origin"]
+	fetch = +refs/heads/jwu/*:refs/remotes/origin/jwu/*
+	fetch = +refs/heads/master:refs/remotes/origin/master
 [alias]
     tree = log --graph --oneline
     fap = fetch --all --prune
