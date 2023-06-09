@@ -5,19 +5,36 @@
     editor = vim
 [advice]
     detachedHead = false
-[remote "origin"]
-	fetch = +refs/heads/jwu/*:refs/remotes/origin/jwu/*
-	fetch = +refs/heads/master:refs/remotes/origin/master
 [alias]
+    # Compact git log view
     tree = log --graph --oneline
-    fap = fetch --all --prune
-    ref = log --graph --oneline HEAD origin/HEAD
-    compare = !git log --graph --oneline --cherry-mark --boundary HEAD...${1}
+
+    # See all local branches
     btree = !git log --graph --oneline --cherry-mark --boundary HEAD...$(git for-each-ref refs/heads --format='%(refname:short)')
+
+    # Compare current commit with master
+    ref = !git compare origin/master
+
+    # Compare current commit with another commit
+    compare = !git log --graph --oneline --cherry-mark --boundary HEAD...${1}
+
+    # Fetch and prune all branches
+    fap = fetch --all --prune
+
+    # Refresh
+    refresh = !git fap && git checkout origin/master && git gone
+
+    # Delete all local branches that have been merged (deleted on remote)
+    gone = !git branch -D $(git for-each-ref --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' refs/heads)
+
+    # Delete all remote branches
+    delrem = !git branch -r | grep -vw "origin/master" | xargs git branch -rd
+
+    # Open origin/upstream in browser
     origin = !open https://$(git remote get-url origin | sed "s/^git@//" | tr ":" "/")
     upstream = !open https://$(git remote get-url upstream | sed "s/^git@//" | tr ":" "/")
+
+    # Clone personal repos using just their name
     download = !git clone git@me.github.com:jerry1100/${1}.git
-    gone = !git branch -D $(git for-each-ref --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' refs/heads)
-    delrem = !git branch -r | grep -v "origin/master" | xargs git branch -rd
 [includeIf "gitdir:~/me/"]
     path = ~/me/dotfiles/gitconfig-me
