@@ -10,7 +10,10 @@
     tree = log --graph --oneline
 
     # See all local branches
-    btree = !git log --graph --oneline --cherry-mark --boundary HEAD...$(git for-each-ref refs/heads --format='%(refname:short)')
+    btree = !git tree --cherry-mark --boundary $(git for-each-ref refs/heads --format='%(refname:short)')...HEAD
+
+    # See all local branches without their intermediate commits
+    view = !git btree --simplify-by-decoration
 
     # Compare current commit with master
     ref = !git compare origin/master
