@@ -24,8 +24,11 @@
     # Fetch and prune all branches
     fap = fetch --all --prune
 
+    # Fetch and rebase current branch on top
+    update = !git fap && git gone && git rebase origin/master && git ref
+
     # Refresh
-    refresh = !git fap && git checkout origin/master && git gone
+    fresh = !git fap && git checkout origin/master && git gone
 
     # Delete all local branches that have been merged (deleted on remote)
     gone = !git branch -D $(git for-each-ref --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' refs/heads)
