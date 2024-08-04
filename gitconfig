@@ -9,6 +9,9 @@
     # Compact git log view
     tree = log --graph --oneline
 
+    # See my commits only
+    mine = tree --author="figmajerry"
+
     # See all local branches
     btree = !git tree --cherry-mark --boundary $(git for-each-ref refs/heads --format='%(refname:short)')...HEAD
 
@@ -21,8 +24,17 @@
     # Compare current commit with another commit
     compare = !git log --graph --oneline --cherry-mark --boundary HEAD...${1}
 
+    # See what files have changed
+    filediff = diff --name-only
+
     # Fetch and prune all branches
     fap = fetch --all --prune
+
+    # New branch with prefix with current HEAD as base
+    fork = "!f() { git checkout -b jwu/$1; }; f"
+
+    # New branch with prefix with origin/master as base
+    new = "!f() { git checkout -b jwu/$1 origin/master; }; f"
 
     # Fetch and rebase current branch on top
     update = !git fap && git gone && git rebase origin/master && git ref
@@ -30,8 +42,11 @@
     # Refresh
     fresh = !git fap && git checkout origin/master && git gone
 
+    # Refresh and switch to master
+    fmaster = !git fresh && git checkout master && git reset --hard origin/master
+
     # Delete all local branches that have been merged (deleted on remote)
-    gone = !git branch -D $(git for-each-ref --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' refs/heads)
+    gone = !git branch -D $(git for-each-ref --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' refs/heads) || true
 
     # Delete all remote branches
     delrem = !git branch -r | grep -vw "origin/master" | xargs git branch -rd

@@ -47,3 +47,14 @@ precmd() {
     branch="%F{green}$(__git_ps1 '[%s] ' | sed "s/HEAD/master/" | sed 's/remotes\///')%f"
     PROMPT="${user} ${dir} ${branch}%# "
 }
+
+# Push branch and open a PR
+function pr() {
+  BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+  REPO="$(git config --get remote.origin.url | sed 's/.*github.com[:/]\(.*\)\.git/\1/')"
+
+  echo "Pushing $BRANCH to $REPO..."
+  git push -u origin "$BRANCH"
+
+  open "https://github.com/$REPO/compare/$BRANCH"
+}
