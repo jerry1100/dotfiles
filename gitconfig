@@ -3,6 +3,7 @@
     email = jwu@figma.com
 [core]
     editor = vim
+	excludesFile = /Users/jwu/.gitignore_global
 [advice]
     detachedHead = false
 [alias]
