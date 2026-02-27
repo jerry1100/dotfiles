@@ -24,7 +24,9 @@ Write the code following the style guide below. Keep changes focused and minimal
 
 ### 4. Submit PR
 
-Use the `/submit-pr` skill to push the branch and create a PR.
+**Do not** submit the PR until the user explicitly asks. Wait for the user to say "submit", "send it", "create the PR", etc.
+
+When ready, **always** use the `/submit-pr` skill to push the branch and create a PR. Never manually run `gt submit`, `gh pr edit`, or `gh api` — the skill handles all steps (push, title, description, mark ready, reviewers, detach HEAD).
 
 ## Style guide
 
@@ -108,7 +110,39 @@ function fetchData() {
 }
 ```
 
-### 6. Extract component props into a named type
+### 6. Group related statements with a comment header
+
+When a function has distinct logical sections (e.g., configuring a node, then adding children), separate them with a blank line and a short comment describing the group.
+
+```ts
+// Bad — wall of undifferentiated assignments
+const frame = createFrame()
+frame.width = 200
+frame.height = 100
+frame.layoutMode = 'VERTICAL'
+frame.primaryAxisAlignItems = 'CENTER'
+const text = createText()
+text.fontSize = 14
+text.characters = 'Hello'
+frame.appendChild(text)
+
+// Good — grouped by concern with comment headers
+const frame = createFrame()
+frame.width = 200
+frame.height = 100
+
+// Center children with autolayout
+frame.layoutMode = 'VERTICAL'
+frame.primaryAxisAlignItems = 'CENTER'
+
+// Add label
+const text = createText()
+text.fontSize = 14
+text.characters = 'Hello'
+frame.appendChild(text)
+```
+
+### 7. Extract component props into a named type
 
 Name the type `{Component}Props` and place it directly above the component definition.
 
