@@ -13,6 +13,24 @@ STATUS_FILE="/tmp/pr_status.txt"
 STATE_FILE="/tmp/pr_monitor_state"
 touch "$STATE_FILE"
 
+# Column widths (content only, excluding border chars and padding)
+W_PR=8
+W_TITLE=64
+W_CI=12
+W_REV=23
+
+# Build border strings from column widths
+border_seg() { printf '─%.0s' $(seq 1 $(($1 + 2))); }
+SEG_PR=$(border_seg $W_PR)
+SEG_TITLE=$(border_seg $W_TITLE)
+SEG_CI=$(border_seg $W_CI)
+SEG_REV=$(border_seg $W_REV)
+
+TOP="┌${SEG_PR}┬${SEG_TITLE}┬${SEG_CI}┬${SEG_REV}┐"
+MID="├${SEG_PR}┼${SEG_TITLE}┼${SEG_CI}┼${SEG_REV}┤"
+BOT="└${SEG_PR}┴${SEG_TITLE}┴${SEG_CI}┴${SEG_REV}┘"
+ROW_FMT="│ %-${W_PR}s │ %-${W_TITLE}s │ %-${W_CI}s │ %-${W_REV}s │\n"
+
 echo "Starting PR monitor..." > "$STATUS_FILE"
 
 while true; do
@@ -20,13 +38,13 @@ while true; do
   count=$(echo "$prs" | jq 'length')
 
   # Build table header
-  output="┌──────────┬────────────────────────────────────────────────────┬──────────────┬─────────────────────────┐\n"
-  output+="$(printf '│ %-8s │ %-50s │ %-12s │ %-23s │\n' 'PR' 'Title' 'CI' 'Review')\n"
-  output+="├──────────┼────────────────────────────────────────────────────┼──────────────┼─────────────────────────┤\n"
+  output="${TOP}\n"
+  output+="$(printf "$ROW_FMT" 'PR' 'Title' 'CI' 'Review')\n"
+  output+="${MID}\n"
 
   if [ "$count" = "0" ]; then
-    output+="│ No open PRs                                                                      │\n"
-    output+="└──────────┴────────────────────────────────────────┴──────────────┴──────────────┘\n"
+    output+="$(printf "$ROW_FMT" '' 'No open PRs' '' '')\n"
+    output+="${BOT}\n"
     echo -e "$output" > "$STATUS_FILE"
     sleep 120
     continue
@@ -69,14 +87,21 @@ while true; do
       rev="$rev [rtm]"
     fi
 
-    # Truncate title
-    short_title=$(echo "$title" | cut -c1-49)
-    [ ${#title} -gt 49 ] && short_title="${short_title}…"
+    # Truncate title (ASCII only to avoid multi-byte printf issues)
+    if [ ${#title} -gt $W_TITLE ]; then
+      short_title="${title:0:$((W_TITLE - 2))}.."
+    else
+      short_title="$title"
+    fi
 
-    # Truncate review to column width
-    short_rev=$(echo "$rev" | cut -c1-23)
+    # Truncate review
+    if [ ${#rev} -gt $W_REV ]; then
+      short_rev="${rev:0:$((W_REV - 2))}.."
+    else
+      short_rev="$rev"
+    fi
 
-    printf '│ %-8s │ %-50s │ %-12s │ %-23s │\n' "#$pr_num" "$short_title" "$ci" "$short_rev"
+    printf "$ROW_FMT" "#$pr_num" "$short_title" "$ci" "$short_rev"
 
     # State tracking for notifications
     line="$pr_num|$ci|$review|$merge_state"
@@ -109,7 +134,7 @@ while true; do
   done > /tmp/pr_table_rows.txt
 
   # Write table (without countdown — that gets appended by the countdown loop)
-  TABLE="$output$(cat /tmp/pr_table_rows.txt)\n└──────────┴────────────────────────────────────────────────────┴──────────────┴─────────────────────────┘"
+  TABLE="$output$(cat /tmp/pr_table_rows.txt)\n${BOT}"
 
   # Countdown loop
   for ((i=120; i>=0; i--)); do

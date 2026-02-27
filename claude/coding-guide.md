@@ -30,7 +30,9 @@ When ready, **always** use the `/submit-pr` skill to push the branch and create 
 
 ## Style guide
 
-### 1. Use early returns over nested if statements
+**These rules are mandatory. Follow them exactly in all code you write or modify.**
+
+### 1. ALWAYS use early returns over nested if statements
 
 ```ts
 // Bad
@@ -56,7 +58,7 @@ function process(item: Item) {
 }
 ```
 
-### 2. Always use curly braces for if statements
+### 2. ALWAYS use curly braces for if statements
 
 ```ts
 // Bad
@@ -68,7 +70,7 @@ if (condition) {
 }
 ```
 
-### 3. Inline short objects
+### 3. ALWAYS inline short objects
 
 ```ts
 // Bad
@@ -83,7 +85,7 @@ doWork({ id: 1, name: 'foo' });
 
 Split across lines only when the object is complex or has many fields.
 
-### 4. Don't export functions unnecessarily
+### 4. NEVER export functions unnecessarily
 
 Only add `export` when the function is actually used outside the file.
 
@@ -95,7 +97,7 @@ export function helperFn() { ... }
 function helperFn() { ... }
 ```
 
-### 5. SNAKE_CASE for consts and magic numbers
+### 5. ALWAYS use SNAKE_CASE for consts and magic numbers
 
 Place them near the top of the file, below imports.
 
@@ -110,7 +112,7 @@ function fetchData() {
 }
 ```
 
-### 6. Group related statements with a comment header
+### 6. ALWAYS group related statements with a comment header
 
 When a function has distinct logical sections (e.g., configuring a node, then adding children), separate them with a blank line and a short comment describing the group.
 
@@ -142,7 +144,38 @@ text.characters = 'Hello'
 frame.appendChild(text)
 ```
 
-### 7. Extract component props into a named type
+### 7. NEVER use non-null assertions
+
+Use proper null checks or early returns instead of `!` postfix assertions.
+
+```ts
+// Bad
+const name = user!.name
+const el = document.getElementById('root')!
+
+// Good
+if (!user) {
+  return;
+}
+const name = user.name
+```
+
+### 8. ALWAYS add a brief comment above useEffect explaining its purpose
+
+```ts
+// Bad
+useEffect(() => {
+  fetchData()
+}, [id])
+
+// Good
+// Refetch data when the selected item changes
+useEffect(() => {
+  fetchData()
+}, [id])
+```
+
+### 9. ALWAYS extract component props into a named type
 
 Name the type `{Component}Props` and place it directly above the component definition.
 
