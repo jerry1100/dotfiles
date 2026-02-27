@@ -1,6 +1,6 @@
 ---
 name: monitor-prs
-description: "Monitor all open PRs, showing CI and review status in a tmux dashboard. Automatically fixes CI failures and restacks branches."
+description: "Monitor all open PRs, showing CI and review status in a tmux dashboard. Automatically fixes CI failures, addresses review feedback, and restacks branches."
 ---
 
 # Monitor PRs
@@ -47,6 +47,31 @@ When CI fails on a PR:
 6. Resume monitoring all PRs.
 
 If no slots are available, inform the user and wait.
+
+## Addressing review feedback
+
+When a new review comment comes in on a PR:
+
+1. Fetch the PR's inline comments: `gh api repos/{owner}/{repo}/pulls/{number}/comments`
+2. Track which comments you've already seen in `/tmp/pr_monitor_comments`. Skip any comment IDs already recorded.
+3. For each new comment, determine if it's **actionable** (requests a code change) or **informational** (praise, acknowledgement, question that doesn't need a code change). Skip non-actionable comments.
+4. For actionable comments:
+   a. Read the relevant file and surrounding code to gather context.
+   b. Present your analysis to the user: what the reviewer is asking for, whether you agree, and what the fix would look like.
+   c. Send a macOS notification so the user knows to check the terminal: `osascript -e 'display notification "Review comment on #NNN" with title "PR Monitor" subtitle "..."'`
+   d. **Wait for user approval** before making any changes.
+5. If the user approves the fix:
+   a. Find an available worktree slot (detached HEAD in `~/figma/slot{1,2,3}`).
+   b. Spin up a subagent (Task tool) in that slot to check out the branch, apply the fix, and commit.
+   c. **Do not push yet.** The subagent should stop after committing.
+   d. Tell the user what was changed and send another notification.
+   e. **Wait for user approval** before pushing.
+6. If the user approves the push:
+   a. Push with `gt submit --stack --no-interactive` from the slot.
+   b. Detach HEAD: `git -C ~/figma/slotN checkout --detach`
+   c. Record the comment ID in `/tmp/pr_monitor_comments` so it's not processed again.
+
+**Important:** Never push review feedback fixes without two explicit approvals from the user — one to make the change, one to push it.
 
 ## Restacking after fixes
 
