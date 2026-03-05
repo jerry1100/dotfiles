@@ -22,6 +22,8 @@ Gather context by reading relevant files and understanding the codebase. Ask cla
 
 Write the code following the style guide below. Keep changes focused and minimal.
 
+**CRITICAL: NEVER run `rm -rf` on the project root or any parent directory.** Only delete specific files or subdirectories you created. If you need to clean up, delete individual files by name — never use broad `rm -rf` on directories like `~/figma/figma`, `.`, or `..`.
+
 ### 4. Submit PR
 
 **Do not** submit the PR until the user explicitly asks. Wait for the user to say "submit", "send it", "create the PR", etc.
@@ -175,7 +177,45 @@ useEffect(() => {
 }, [id])
 ```
 
-### 9. ALWAYS extract component props into a named type
+### 9. ALWAYS order functions top-down like a newspaper
+
+High-level functions go first, helpers go below. A caller should appear above the callee so the file reads top-down from intent to implementation.
+
+```ts
+// Bad — have to scroll past helpers to find the main logic
+function formatName(user: User) {
+  return `${user.first} ${user.last}`
+}
+
+function validateUser(user: User) {
+  return user.email.includes('@')
+}
+
+function processUser(user: User) {
+  if (!validateUser(user)) {
+    return
+  }
+  return formatName(user)
+}
+
+// Good — main function first, helpers below
+function processUser(user: User) {
+  if (!validateUser(user)) {
+    return
+  }
+  return formatName(user)
+}
+
+function validateUser(user: User) {
+  return user.email.includes('@')
+}
+
+function formatName(user: User) {
+  return `${user.first} ${user.last}`
+}
+```
+
+### 10. ALWAYS extract component props into a named type
 
 Name the type `{Component}Props` and place it directly above the component definition.
 
@@ -194,4 +234,18 @@ type UserCardProps = {
 export function UserCard({ name, avatar }: UserCardProps) {
   ...
 }
+```
+
+### 11. ALWAYS prefer `const` over `let`
+
+Only use `let` when reassignment is actually needed.
+
+```ts
+// Bad
+let name = user.first + ' ' + user.last
+let items = getItems()
+
+// Good
+const name = user.first + ' ' + user.last
+const items = getItems()
 ```

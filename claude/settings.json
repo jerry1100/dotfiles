@@ -1,0 +1,84 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(gh:*)",
+      "Bash(gt:*)",
+      "Bash(bazel:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(pnpm:*)",
+      "Bash(bundle:*)",
+      "Bash(ruby:*)",
+      "Bash(node:*)",
+      "Bash(./devbox:*)",
+      "Bash(./fs:*)",
+      "Bash(find:*)",
+      "Bash(wc:*)",
+      "Bash(curl:*)",
+      "Bash(jq:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(sort:*)",
+      "Bash(diff:*)",
+      "Bash(which:*)",
+      "Bash(echo:*)",
+      "Bash(tmux:*)",
+      "Bash(osascript:*)",
+      "Bash(cd ~/figma:*)",
+      "Bash(rm /tmp:*)",
+      "Bash(rm -rf /tmp:*)",
+      "Bash(~/.claude/skills/monitor-prs/ci-watcher.sh)",
+      "mcp__graphite__run_gt_cmd",
+      "mcp__buildkite__*",
+      "mcp__slack__*",
+      "mcp__notion__*",
+      "Read",
+      "Edit",
+      "Write",
+      "WebFetch",
+      "WebSearch",
+      "Glob",
+      "Grep",
+      "Task",
+      "Bash(python3 -c \":*)",
+      "Bash(python3 fullscreen/scripts/glsl/test_glsl.py --update)",
+      "Bash(python3 fullscreen/scripts/glsl/test_prepare_shaders.py --update)",
+      "Bash(python3 fullscreen/scripts/glsl/generate_expected_shader_output.py)",
+      "Bash(xargs basename -a)",
+      "Bash(grep:*)",
+      "Bash(sed:*)",
+      "Bash(ln:*)",
+      "Bash(python3:*)",
+      "Bash(for:*)",
+      "Bash(pkill:*)",
+      "Bash(done)",
+      "Bash(true:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/jwu/me/dotfiles"
+    ]
+  },
+  "model": "opus[1m]",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/claude-approve-hook.py"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "monitor-ci@figma-internal": true
+  }
+}

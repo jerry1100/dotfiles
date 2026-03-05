@@ -10,7 +10,7 @@ Monitor all of the user's open PRs. This runs as a separate agent process from t
 ## Dashboard script
 
 A standalone dashboard script lives at `~/.claude/skills/monitor-prs/pr-monitor.sh`. It handles:
-- Polling `gh pr list --author @me` every 2 minutes
+- Polling `gh pr list --author @me` every 2 minutes (draft PRs are excluded)
 - Writing a formatted status table to `/tmp/pr_status.txt`
 - Sending macOS notifications on state changes (CI pass/fail, review approved/changes requested)
 - Auto-labeling `ready-to-merge` when CI passes and PR is approved
@@ -35,16 +35,61 @@ else
 fi
 ```
 
-## Fixing CI failures
+## CI failure watcher
 
-When CI fails on a PR:
+After starting the dashboard, run a background watcher that triggers automatically when CI fails:
 
-1. Find an available worktree slot by checking which of `~/figma/slot{1,2,3}` has a detached HEAD.
-2. Check out the PR branch in that slot: `git -C ~/figma/slotN checkout <branch>`
-3. Use the `/monitor-ci` skill to diagnose and fix the failure.
-4. Push the fix using `gt submit --stack --no-interactive`.
-5. Detach from the branch: `git -C ~/figma/slotN checkout --detach`
-6. Resume monitoring all PRs.
+```bash
+~/.claude/skills/monitor-prs/ci-watcher.sh
+```
+
+The script uses `/tmp/pr_monitor_handled` to skip failures that have already been handled. After diagnosing a failure, append the matched line to that file so the watcher doesn't re-trigger on it. When the dashboard shows the PR's status has changed (e.g. back to `passed` or `pending`), it naturally won't match anymore.
+
+Clear `/tmp/pr_monitor_handled` at the start of each `/monitor-prs` session.
+
+Run this with `run_in_background: true`. When it completes, immediately start diagnosing. After handling (whether a fix, a label removal, or no action needed), silently restart the watcher — do not ask the user or mention the restart.
+
+## Fixing CI failures and blocked PRs
+
+`FAILED` and `BLOCKED` PRs are treated the same way — both trigger automatic diagnosis and fix.
+
+### Finding the failure
+
+- **`FAILED` PRs**: Use `gh pr checks <number>` to find the failed check, then inspect Buildkite logs.
+- **`BLOCKED` PRs**: The `blocked` label is added by Aviator when CI fails while the PR is in the merge queue. The failure may not show up in `gh pr checks` on the PR's own branch — it happened on Aviator's merge validation build. To find it:
+  1. Fetch the latest Aviator bot comment: `gh pr view <number> --json comments --jq '[.comments[] | select(.author.login == "aviator-app")] | last | .body'`
+  2. The comment contains a link to the failed CI job and a reason (e.g. "CI timed out", specific check failure). Use that to diagnose.
+
+### Triage
+
+Before spinning up a subagent, determine if the failure is infrastructure or code:
+
+**Infrastructure failures** (no code fix needed — handle automatically without asking the user):
+- "CI timed out"
+- AWS spot termination (`spot_termination` in logs)
+- "Max flaky retries reached" with no PR-related cause
+- Any failure where the retry service says the failure is NOT PR-related
+
+For these: retrigger CI (push an empty commit or use the Buildkite rebuild API), remove the `blocked` label if present, and silently restart the watcher.
+
+For `BLOCKED` PRs: `gh api repos/{owner}/{repo}/issues/{number}/labels/blocked -X DELETE`
+For `FAILED` PRs: push an empty commit to retrigger: `cd <worktree> && git commit --allow-empty -m "retrigger CI" && gt submit --stack --no-interactive`
+
+**Code failures** (retry service says PR-related, or actual test/build errors): Proceed to the fixing steps below.
+
+### Fixing
+
+1. Find an available worktree slot by running `slots` (slots showing "available (detached)" are free).
+2. Spin up a subagent (Task tool) in that slot to check out the branch and diagnose the failure.
+3. Present the diagnosis and proposed fix to the user. Send a macOS notification.
+4. **Wait for user approval** before pushing.
+5. If approved, push with `gt submit --stack --no-interactive` from the slot.
+6. If the PR had the `blocked` label, remove it: `gh api repos/{owner}/{repo}/issues/{number}/labels/blocked -X DELETE`
+7. Aviator will auto-re-queue since the PR has the `ready-to-merge` label.
+8. Detach HEAD: `git -C ~/figma/slotN checkout --detach`
+9. Restart the CI failure watcher.
+
+Note: Use `gh api` to remove labels — `gh pr edit --remove-label` fails due to a GitHub Projects Classic deprecation error.
 
 If no slots are available, inform the user and wait.
 
@@ -61,7 +106,7 @@ When a new review comment comes in on a PR:
    c. Send a macOS notification so the user knows to check the terminal: `osascript -e 'display notification "Review comment on #NNN" with title "PR Monitor" subtitle "..."'`
    d. **Wait for user approval** before making any changes.
 5. If the user approves the fix:
-   a. Find an available worktree slot (detached HEAD in `~/figma/slot{1,2,3}`).
+   a. Find an available worktree slot by running `slots` (slots showing "available (detached)" are free).
    b. Spin up a subagent (Task tool) in that slot to check out the branch, apply the fix, and commit.
    c. **Do not push yet.** The subagent should stop after committing.
    d. Tell the user what was changed and send another notification.

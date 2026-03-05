@@ -11,6 +11,7 @@
 
 STATUS_FILE="/tmp/pr_status.txt"
 STATE_FILE="/tmp/pr_monitor_state"
+AVIATOR_TOKEN_FILE="$HOME/.config/aviator/token"
 touch "$STATE_FILE"
 
 # Column widths (content only, excluding border chars and padding)
@@ -34,7 +35,8 @@ ROW_FMT="│ %-${W_PR}s │ %-${W_TITLE}s │ %-${W_CI}s │ %-${W_REV}s │\n"
 echo "Starting PR monitor..." > "$STATUS_FILE"
 
 while true; do
-  prs=$(gh pr list --author @me --json number,title,reviewDecision,mergeStateStatus,labels,state --limit 20 2>&1)
+  prs=$(gh pr list --author @me --repo figma/figma --json number,title,reviewDecision,mergeStateStatus,labels,state,isDraft --limit 20 2>&1)
+  prs=$(echo "$prs" | jq '[.[] | select(.isDraft == false)]')
   count=$(echo "$prs" | jq 'length')
 
   # Build table header
@@ -50,23 +52,41 @@ while true; do
     continue
   fi
 
+  # Fetch Aviator merge queue (one call per cycle)
+  # Pre-extract into a lookup file: "pr_number position total" per line
+  QUEUE_FILE="/tmp/pr_monitor_queue"
+  > "$QUEUE_FILE"
+  if [ -f "$AVIATOR_TOKEN_FILE" ]; then
+    aviator_token=$(cat "$AVIATOR_TOKEN_FILE")
+    curl -s -H "Authorization: Bearer $aviator_token" \
+      "https://api.aviator.co/api/v1/pull_request/queued?org=figma&repo=figma" 2>/dev/null | \
+      jq -r '(.pull_requests | length) as $total | .pull_requests | to_entries[] | "\(.value.number) \(.key + 1) \($total)"' \
+      > "$QUEUE_FILE" 2>/dev/null
+  fi
+
   echo "$prs" | jq -r '.[].number' | while read pr_num; do
     title=$(echo "$prs" | jq -r ".[] | select(.number == $pr_num) | .title")
     review=$(echo "$prs" | jq -r ".[] | select(.number == $pr_num) | .reviewDecision")
     merge_state=$(echo "$prs" | jq -r ".[] | select(.number == $pr_num) | .mergeStateStatus")
     has_rtm=$(echo "$prs" | jq -r ".[] | select(.number == $pr_num) | [.labels[].name] | index(\"ready-to-merge\") // empty")
+    has_blocked=$(echo "$prs" | jq -r ".[] | select(.number == $pr_num) | [.labels[].name] | index(\"blocked\") // empty")
     state=$(echo "$prs" | jq -r ".[] | select(.number == $pr_num) | .state")
 
-    fails=$(gh pr checks "$pr_num" 2>&1 | grep -E "^\S+\tfail\t" | grep -v "notify-failure" | wc -l | tr -d ' ')
-    pending=$(gh pr checks "$pr_num" 2>&1 | grep -E "pending|running" | wc -l | tr -d ' ')
-
     # CI status
-    if [ "$fails" -gt 0 ]; then
-      ci="FAILED"
-    elif [ "$pending" -gt 0 ]; then
-      ci="pending ($pending)"
+    if [ -n "$has_blocked" ]; then
+      ci="BLOCKED"
     else
-      ci="passed"
+      checks_output=$(gh pr checks "$pr_num" --repo figma/figma 2>/dev/null)
+      fails=$(echo "$checks_output" | grep -E "^\S+\tfail\t" | grep -v "notify-failure" | wc -l | tr -d ' ')
+      pending=$(echo "$checks_output" | grep -E "pending|running" | wc -l | tr -d ' ')
+
+      if [ "$fails" -gt 0 ]; then
+        ci="FAILED"
+      elif [ "$pending" -gt 0 ]; then
+        ci="pending ($pending)"
+      else
+        ci="passed"
+      fi
     fi
 
     # Review status
@@ -82,8 +102,13 @@ while true; do
       rev="$rev [conflict]"
     fi
 
-    # Label indicator
-    if [ -n "$has_rtm" ]; then
+    # Queue position (replaces rtm label when in queue)
+    q_line=$(grep "^$pr_num " "$QUEUE_FILE" 2>/dev/null)
+    if [ -n "$q_line" ]; then
+      q_pos=$(echo "$q_line" | cut -d' ' -f2)
+      q_total=$(echo "$q_line" | cut -d' ' -f3)
+      rev="queued #${q_pos}/${q_total}"
+    elif [ -n "$has_rtm" ]; then
       rev="$rev [rtm]"
     fi
 
@@ -140,7 +165,7 @@ while true; do
   for ((i=120; i>=0; i--)); do
     mins=$((i / 60))
     secs=$((i % 60))
-    echo -e "$TABLE\nNext check in ${mins}m $(printf '%02d' $secs)s" > "$STATUS_FILE"
+    echo -e "$TABLE\nNext check in ${mins}m $(printf '%02d' $secs)s" > "${STATUS_FILE}.tmp" && mv "${STATUS_FILE}.tmp" "$STATUS_FILE"
     sleep 1
   done
 done
