@@ -34,6 +34,7 @@
       "Bash(rm /tmp:*)",
       "Bash(rm -rf /tmp:*)",
       "Bash(~/.claude/skills/monitor-prs/ci-watcher.sh)",
+      "Bash(~/.claude/skills/monitor-prs/pr-monitor.sh:*)",
       "mcp__graphite__run_gt_cmd",
       "mcp__buildkite__*",
       "mcp__slack__*",
@@ -56,9 +57,17 @@
       "Bash(ln:*)",
       "Bash(python3:*)",
       "Bash(for:*)",
+      "Bash(ps:*)",
+      "Bash(lsof:*)",
       "Bash(pkill:*)",
+      "Bash(sleep:*)",
+      "Bash(disown:*)",
       "Bash(done)",
-      "Bash(true:*)"
+      "Bash(true:*)",
+      "mcp__statsig__Get_List_of_Gates",
+      "mcp__statsig__Get_List_of_Dynamic_Configs",
+      "mcp__statsig__search",
+      "Read(//Users/jwu/figma/weavy/core/**)"
     ],
     "additionalDirectories": [
       "/Users/jwu/me/dotfiles"

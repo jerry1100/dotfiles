@@ -10,7 +10,7 @@ Monitor all of the user's open PRs. This runs as a separate agent process from t
 ## Dashboard script
 
 A standalone dashboard script lives at `~/.claude/skills/monitor-prs/pr-monitor.sh`. It handles:
-- Polling `gh pr list --author @me` every 2 minutes (draft PRs are excluded)
+- Polling `gh pr list --author @me` every minute (draft PRs are excluded)
 - Writing a formatted status table to `/tmp/pr_status.txt`
 - Sending macOS notifications on state changes (CI pass/fail, review approved/changes requested)
 - Auto-labeling `ready-to-merge` when CI passes and PR is approved
@@ -43,11 +43,9 @@ After starting the dashboard, run a background watcher that triggers automatical
 ~/.claude/skills/monitor-prs/ci-watcher.sh
 ```
 
-The script uses `/tmp/pr_monitor_handled` to skip failures that have already been handled. After diagnosing a failure, append the matched line to that file so the watcher doesn't re-trigger on it. When the dashboard shows the PR's status has changed (e.g. back to `passed` or `pending`), it naturally won't match anymore.
+The watcher blocks on `/tmp/pr_monitor_trigger` (written by `pr-monitor.sh` when it detects a confirmed CI failure — requires two consecutive poll cycles showing failure). When triggered, the watcher batches all new failures over 15s, outputs them all, and exits.
 
-Clear `/tmp/pr_monitor_handled` at the start of each `/monitor-prs` session.
-
-Run this with `run_in_background: true`. When it completes, immediately start diagnosing. After handling (whether a fix, a label removal, or no action needed), silently restart the watcher — do not ask the user or mention the restart.
+Run this with `run_in_background: true`. When it completes, **immediately restart the watcher first**, then start diagnosing. This minimizes the gap where failures could be missed. After handling, the watcher is already running — no need to restart again.
 
 ## Fixing CI failures and blocked PRs
 
@@ -64,13 +62,19 @@ Run this with `run_in_background: true`. When it completes, immediately start di
 
 Before spinning up a subagent, determine if the failure is infrastructure or code:
 
-**Infrastructure failures** (no code fix needed — handle automatically without asking the user):
+**Infrastructure/flaky failures** (no code fix needed):
 - "CI timed out"
 - AWS spot termination (`spot_termination` in logs)
 - "Max flaky retries reached" with no PR-related cause
 - Any failure where the retry service says the failure is NOT PR-related
+- Known flaky tests (marked "flaky, suppressed" in annotations)
 
-For these: retrigger CI (push an empty commit or use the Buildkite rebuild API), remove the `blocked` label if present, and silently restart the watcher.
+Before declaring a failure as flaky and retriggering:
+1. Search Slack for the test name: `mcp__slack__search` with the test name or service
+2. Show the user the relevant Slack threads confirming it's a known flaky
+3. Then automatically retrigger CI
+
+For retriggering: push an empty commit from a worktree slot, remove `blocked` label if present, and restart the watcher.
 
 For `BLOCKED` PRs: `gh api repos/{owner}/{repo}/issues/{number}/labels/blocked -X DELETE`
 For `FAILED` PRs: push an empty commit to retrigger: `cd <worktree> && git commit --allow-empty -m "retrigger CI" && gt submit --stack --no-interactive`
@@ -81,9 +85,9 @@ For `FAILED` PRs: push an empty commit to retrigger: `cd <worktree> && git commi
 
 1. Find an available worktree slot by running `slots` (slots showing "available (detached)" are free).
 2. Spin up a subagent (Task tool) in that slot to check out the branch and diagnose the failure.
-3. Present the diagnosis and proposed fix to the user. Send a macOS notification.
-4. **Wait for user approval** before pushing.
-5. If approved, push with `gt submit --stack --no-interactive` from the slot.
+3. If the fix is straightforward and you're confident, push directly without asking.
+4. If the fix is complex or ambiguous, present the diagnosis and proposed fix to the user and wait for approval.
+5. Push with `gt submit --stack --no-interactive` from the slot.
 6. If the PR had the `blocked` label, remove it: `gh api repos/{owner}/{repo}/issues/{number}/labels/blocked -X DELETE`
 7. Aviator will auto-re-queue since the PR has the `ready-to-merge` label.
 8. Detach HEAD: `git -C ~/figma/slotN checkout --detach`
